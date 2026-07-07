@@ -70,11 +70,18 @@ function showScreen(id) {
 }
 
 /* ---------- game initialization ---------- */
-function init() {
+function resetGame() {
   S.attempt = 1;
   S.history = [];
   resetAttemptState();
-  
+}
+
+function init() {
+  resetGame();
+
+  // Event wiring below must run exactly once — re-running init() would stack
+  // duplicate listeners (two runAttempt intervals mutating shared hiker state).
+
   // Title screen button
   $("startBtn").addEventListener("click", () => {
     showScreen("play");
@@ -131,13 +138,14 @@ function init() {
 
   // Replay buttons
   $("replayBtn").addEventListener("click", () => {
+    if (runTimer) { clearInterval(runTimer); runTimer = null; }
     if (S.attempt < 3) {
       S.attempt++;
       resetAttemptState();
       showScreen("play");
       setupPlayScreen();
     } else {
-      init();
+      resetGame(); // state only — never re-run init(), which would duplicate listeners
       showScreen("title");
     }
   });
@@ -299,10 +307,18 @@ function updateSummaryStrip() {
 
 /* ---------- simulation execution engine ---------- */
 
+let runTimer = null;
+
 function runAttempt() {
+  // A stale interval from a previous run must never mutate this run's state
+  if (runTimer) { clearInterval(runTimer); runTimer = null; }
+
   showScreen("run");
   $("runStatus").textContent = "Hikers are preparing to climb...";
-  
+  // Re-hide the continue button: it stays visible from the previous run otherwise,
+  // letting the debrief open mid-simulation and compute metrics from partial state.
+  $("continueBtn").style.display = "none";
+
   // Clone the play mountain SVG into the run view
   const clone = $("mountainSvg").cloneNode(true);
   clone.id = "mountainSvgRun";
@@ -334,7 +350,7 @@ function runAttempt() {
   const hasCheckpoint = Object.values(S.supports).includes("checkpoint");
   const samGondola = S.gondola && !S.turnstile && !hasCheckpoint;
 
-  const timer = setInterval(() => {
+  runTimer = setInterval(() => {
     step++;
     let active = false;
 
@@ -450,7 +466,8 @@ function runAttempt() {
     drawPathsOnSvg("mountainSvgRun");
 
     if (!active) {
-      clearInterval(timer);
+      clearInterval(runTimer);
+      runTimer = null;
       $("runStatus").textContent = "Climb completed. Review the results.";
       $("continueBtn").style.display = "inline-flex";
     }

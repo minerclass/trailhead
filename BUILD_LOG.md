@@ -52,10 +52,20 @@ The feedback is visual. Colored path lines show walking progress, gray summit fl
       Success count to match the game's own thesis. Fix verified against live state: 86%
       challenge, real summit counting. `node --check` passes.
 - [ ] Device-test at 390px width
-- [ ] FOLLOW-UP: two consecutive traversals in one session produced different halt counts
-      (3 then 2) despite the "deterministic rules" claim — suspect incomplete state reset on
-      re-entering the design phase via startBtn (as opposed to replayBtn). Reproduce and fix.
-- [ ] Run `node --check game.js` after any future code edit
+- [x] FOLLOW-UP RESOLVED (2026-07-07): the divergent halt counts were caused by the
+      continue button staying visible from the previous run, allowing the debrief to open
+      mid-simulation and compute metrics from partial state. Fixes shipped: (1) continueBtn
+      re-hidden at the start of every run; (2) interval id promoted to module-level
+      `runTimer`, cleared at the top of runAttempt and in the replay handler so a stale
+      timer can never mutate a new run; (3) "Start Over" now calls resetGame() instead of
+      re-running init(), which was stacking duplicate event listeners (two runAttempt
+      intervals) on every full 3-attempt cycle; (4) script tag now `game.js?v=3` — BUMP THE
+      VERSION QUERY on every game.js change to bust browser/Pages caches.
+      Verified: two consecutive default runs produce identical results (1/4 summits, 86%
+      challenge, 75% barriers, halts ell@0/dys@3/rly@7); gondola run correctly shows 0/4
+      with Sam's gray flag excluded; continue button hidden during both runs; zero console
+      errors.
+- [ ] Run `node --check game.js` after any future code edit (and bump the `?v=` query)
 
 ## Next steps
 
