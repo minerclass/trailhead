@@ -45,9 +45,16 @@ The feedback is visual. Colored path lines show walking progress, gray summit fl
 - [x] Keyboard support exists for SVG trail-node selection
 - [x] Aria-live announcer exists
 - [x] Reduced-motion CSS disables animation and transition effects
-- [ ] Confirm GitHub Pages is enabled from `main`
-- [ ] Verify live Pages URL in browser
+- [x] Confirm GitHub Pages is enabled from `main` (status "built"; live URL returns 200)
+- [x] Verify live Pages URL in browser — found + fixed a P0: debrief metrics read `h.id` on
+      string ids, so `walkedSteps` stayed empty → "Productive Challenge NaN%" and Summit
+      Success permanently 0/4. Also excluded gray-flag (gondola) arrivals from the Summit
+      Success count to match the game's own thesis. Fix verified against live state: 86%
+      challenge, real summit counting. `node --check` passes.
 - [ ] Device-test at 390px width
+- [ ] FOLLOW-UP: two consecutive traversals in one session produced different halt counts
+      (3 then 2) despite the "deterministic rules" claim — suspect incomplete state reset on
+      re-entering the design phase via startBtn (as opposed to replayBtn). Reproduce and fix.
 - [ ] Run `node --check game.js` after any future code edit
 
 ## Next steps

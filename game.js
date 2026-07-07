@@ -604,12 +604,13 @@ function showDebrief() {
   let totalSuccessfulSummits = 0;
 
   hikers.forEach(h => {
-    const pos = S.hikerPositions[h.id];
-    if (pos === 8) totalSuccessfulSummits++;
+    // h is the string id ("ell"|"dys"|"rly"|"sam") — state objects are keyed by it directly
+    const pos = S.hikerPositions[h];
+    // A gray flag means Sam arrived by gondola: reached the summit, did none of the climb.
+    if (pos === 8 && S.hikerSummitFlag[h] !== "gray") totalSuccessfulSummits++;
 
     // Track challenges along their path
-    // Maya path length = S.hikerPaths.ell
-    const limit = S.hikerHaltSeg[h.id] !== null ? S.hikerHaltSeg[h.id] : 7;
+    const limit = S.hikerHaltSeg[h] !== null ? S.hikerHaltSeg[h] : 7;
     for (let i = 0; i <= limit; i++) {
       if (h === "sam" && S.hikerSummitFlag.sam === "gray") {
         // Sam on gondola experienced 0 challenge
