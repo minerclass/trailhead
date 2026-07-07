@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Trailhead — Design a support trail up the mountain of historical arguments. Watch Maya, Jordan, Riley, and Sam attempt it. A pedagogical friction game by Micah Miner.">
+  <title>Trailhead | A Pedagogical Friction Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="announcer" class="sr-only" aria-live="polite"></div>
+<div class="wrap">
+
+  <!-- SCREEN 1: TITLE -->
+  <section class="screen active" id="title">
+    <p class="kicker">A pedagogical-friction game &middot; Equity &amp; Scaffolding</p>
+    <h1>Trail<em>head</em></h1>
+    <p class="lede">Calibrate a path up the mountain of a historical argument. See how one trail becomes a workout for one student and a wall for another.</p>
+    
+    <div class="mentor">
+      <div>
+        <span class="who">The Lead Guide</span>
+        <p>&ldquo;Your students are climbing toward a defensible thesis on the causes of the Civil War. But they are not starting from the same place. If you leave the trail uncalibrated, some will be gated by barriers they cannot bypass. If you offer a gondola shortcut (AI), others will fly to the top without doing any thinking. Your job is to scaffold the climb so everyone summits on their own feet.&rdquo;</p>
+      </div>
+    </div>
+
+    <div class="hikers-intro">
+      <h3>Meet the Climbers</h3>
+      <div class="hikers-grid">
+        <div class="hiker-card card-ell">
+          <span class="h-dot dot-ell">M</span>
+          <strong>Maya (Multilingual Learner)</strong>
+          <p>A deep reasoner who gets halted by text-heavy reading blocks unless waymarked with translation support.</p>
+        </div>
+        <div class="hiker-card card-dys">
+          <span class="h-dot dot-dys">J</span>
+          <strong>Jordan (Dysgraphia)</strong>
+          <p>Understand the concepts but gets blocked at heavy writing switchbacks unless given a speech-to-text bridge.</p>
+        </div>
+        <div class="hiker-card card-sam">
+          <span class="h-dot dot-sam">S</span>
+          <strong>Sam (Bypass-Defaulter)</strong>
+          <p>A high achiever who will take the AI gondola shortcut to get a grade, bypassing all cognitive labor unless held accountable by checkpoints.</p>
+        </div>
+        <div class="hiker-card card-rly">
+          <span class="h-dot dot-rly">R</span>
+          <strong>Riley (Anxious Speaker)</strong>
+          <p>Has excellent evidence but gets blocked by public presentation walls at the summit unless supported by structured peer talk.</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:24px;"><button class="btn" id="startBtn">Inspect the Trail &rarr;</button></p>
+    <p class="credit">Built on Micah Miner's pedagogical-friction framework (productive friction vs. exclusionary barriers, the over-scaffolding trap, and secondary algorithmicity). <a href="https://minerclass.github.io/games-hub/">&larr; Games Hub</a></p>
+  </section>
+
+  <!-- SCREEN 2: PLAY (TRAIL BUILDER) -->
+  <section class="screen" id="play">
+    <div class="topline">
+      <span id="attemptLabel">Attempt 1 of 3</span>
+      <span class="hud-objective">Objective: Get all 4 hikers to walk to the summit</span>
+    </div>
+
+    <div class="workspace-grid">
+      <!-- Mountain SVG Panel -->
+      <div class="mountain-panel">
+        <div class="panel-header">
+          <span class="tag">The Civil War Argument Trail</span>
+        </div>
+        <div class="svg-container">
+          <svg id="mountainSvg" viewBox="0 0 740 440" width="100%" height="auto" aria-label="Topographic mountain trail showing 8 segments.">
+            <!-- Mountain Slope Fill -->
+            <polygon points="0,440 70,390 130,350 210,320 290,270 370,240 450,190 520,150 590,110 660,60 740,60 740,440" class="mountain-bg" />
+            <!-- The Trail Line -->
+            <path d="M 70,390 L 130,350 L 210,320 L 290,270 L 370,240 L 450,190 L 520,150 L 590,110 L 660,60" class="trail-line" />
+            
+            <!-- Segment Nodes (Visual Handles) -->
+            <g id="trailNodes"></g>
+
+            <!-- Hiker Dots (animated during run, hidden now) -->
+            <g id="hikerDots"></g>
+
+            <!-- Gondola Cable (visual marker if gondola active) -->
+            <line x1="70" y1="390" x2="660" y2="60" id="gondolaCable" class="gondola-cable" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Config Panel -->
+      <div class="config-panel">
+        <!-- Global Scaffolding Rules -->
+        <div class="config-group">
+          <h3>Global Settings</h3>
+          <div class="toggle-row">
+            <label class="toggle-control">
+              <input type="checkbox" id="gondolaToggle">
+              <span class="control-label">AI Gondola Access <span class="subtext">(Fast route to summit; zero thinking)</span></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <label class="toggle-control">
+              <input type="checkbox" id="turnstileToggle">
+              <span class="control-label">Device Ban / Turnstile <span class="subtext">(Locks down digital tools &amp; gondola)</span></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Segment Inspector -->
+        <div class="config-group">
+          <h3>Segment Path &amp; Scaffolding</h3>
+          <p class="select-hint" id="selectHint">Select a segment on the mountain or list below to scaffold:</p>
+          
+          <select id="segmentSelect" class="select-box">
+            <option value="0">1. Source Scramble (Text-Heavy)</option>
+            <option value="1">2. Corroboration River (Text-Heavy)</option>
+            <option value="2">3. Context Ridge (Analysis-Heavy)</option>
+            <option value="3">4. Counterargument Ledge (Writing-Heavy)</option>
+            <option value="4">5. Evidence Switchback (Writing-Heavy)</option>
+            <option value="5">6. Thesis Chimney (Writing-Heavy)</option>
+            <option value="6">7. Revision Traverse (Writing-Heavy)</option>
+            <option value="7">8. Summit Defense (Oral-Heavy)</option>
+          </select>
+
+          <div class="scaffold-choices" id="scaffoldChoices">
+            <label class="scaffold-option">
+              <input type="radio" name="supportRadio" value="none" checked>
+              <span><strong>No Scaffolding</strong><p class="opt-desc">Standard rigorous passage. Wiggle-struggle for normal learners; halts for matching barriers.</p></span>
+            </label>
+            <label class="scaffold-option" id="opt-glossary">
+              <input type="radio" name="supportRadio" value="glossary">
+              <span><strong>Waymarks (Bilingual Glossary)</strong><p class="opt-desc">Removes vocabulary barrier for Maya. (Digital; disabled by Device Ban).</p></span>
+            </label>
+            <label class="scaffold-option" id="opt-bridge">
+              <input type="radio" name="supportRadio" value="bridge">
+              <span><strong>STT Bridge (Speech-to-Text)</strong><p class="opt-desc">Removes mechanics barrier for Jordan. (Digital; disabled by Device Ban).</p></span>
+            </label>
+            <label class="scaffold-option">
+              <input type="radio" name="supportRadio" value="belay">
+              <span><strong>Belay Partner (Structured Talk)</strong><p class="opt-desc">Removes performance anxiety for Riley. (Analog).</p></span>
+            </label>
+            <label class="scaffold-option">
+              <input type="radio" name="supportRadio" value="frames">
+              <span><strong>Rope Rail (Sentence Frames)</strong><p class="opt-desc">Reduces difficulty for all hikers. (Analog).</p></span>
+            </label>
+            <label class="scaffold-option">
+              <input type="radio" name="supportRadio" value="checkpoint">
+              <span><strong>Route Checkpoint (Friction Log)</strong><p class="opt-desc">Forces hikers to explain their route, blocking Sam's gondola bypass. (Analog).</p></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Trail Status Summary -->
+    <div class="trail-summary-strip" id="trailSummaryStrip"></div>
+
+    <p style="margin-top:18px; text-align:right;"><button class="btn" id="runBtn">Open the Trail &amp; Observe &rarr;</button></p>
+  </section>
+
+  <!-- SCREEN 3: RUN (ANIMATION SCREEN) -->
+  <section class="screen" id="run">
+    <div class="topline">
+      <span>Attempt Observation</span>
+      <span id="runStatus">Hikers are climbing...</span>
+    </div>
+
+    <div class="mountain-panel anim-view">
+      <div class="svg-container">
+        <!-- Re-rendered clone of mountain SVG for run animation -->
+        <svg id="mountainSvgRun" viewBox="0 0 740 440" width="100%" height="auto"></svg>
+      </div>
+    </div>
+
+    <div class="hiker-status-panel">
+      <h3>Active Hiker Status</h3>
+      <div class="status-grid" id="statusGrid"></div>
+    </div>
+
+    <p style="margin-top:18px; text-align:right;"><button class="btn" id="continueBtn" style="display:none">View Climb Analysis &rarr;</button></p>
+  </section>
+
+  <!-- SCREEN 4: DEBRIEF -->
+  <section class="screen" id="debrief">
+    <p class="kicker">Climb Analysis</p>
+    <h2 id="debriefHeading">Attempt 1 Completed</h2>
+    <p id="debriefSub" class="loadsub">Here is how the four hikers navigated your trail design.</p>
+
+    <div class="sidebyside">
+      <figure class="mountain-panel">
+        <div class="svg-container">
+          <svg id="mountainSvgDebrief" viewBox="0 0 740 440" width="100%" height="auto"></svg>
+        </div>
+        <figcaption>Your Trail Path Traces <span class="cap">(Attempts showing walker paths, halts, and bypasses)</span></figcaption>
+      </figure>
+      
+      <div class="debrief-metrics">
+        <div class="statrow">
+          <div class="stat"><span class="lbl">Hiker Summit Success</span><span class="val" id="statSummit">0 / 4</span></div>
+          <div class="stat"><span class="lbl">Productive Challenge</span><span class="val" id="statChallenge">0%</span></div>
+          <div class="stat"><span class="lbl">Exclusionary Barriers</span><span class="val" id="statBarrier">0%</span></div>
+        </div>
+
+        <div class="crossings-box">
+          <h3>Individual Hiker Outcomes</h3>
+          <ul class="crossings" id="crossingsList"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rationale-before-reveal / Reflection block -->
+    <div class="reflection-box" id="reflectionBox">
+      <h3>Reflection Prompt</h3>
+      <p id="reflectionPrompt">Explain why the combination of a device ban (turnstile) and digital support tools changed the climb for Jordan and Maya:</p>
+      <textarea id="reflectionText" rows="3" placeholder="Type your reflection here before continuing..."></textarea>
+      <button class="btn" id="submitReflectionBtn" style="margin-top:10px;">Save Reflection &amp; See Framework Mapping &rarr;</button>
+    </div>
+
+    <div class="framework-mapping" id="frameworkMapping" style="display:none">
+      <h3>Dissertation Framework Mapping</h3>
+      <div class="mapping-grid">
+        <div class="mapping-card">
+          <h4>Calibrated Challenge (Workout)</h4>
+          <p>When Maya or Jordan climb with translation or speech-to-text, the cognitive demand is untouched but the accessibility barrier is gone. They struggle productively, building lasting capacity.</p>
+        </div>
+        <div class="mapping-card">
+          <h4>Frictionless Bypass (Gondola)</h4>
+          <p>AI generation (gondola) allows Sam to summit immediately, but his flag is hollow. He holds no durable understanding because he experienced no noetic friction.</p>
+        </div>
+        <div class="mapping-card">
+          <h4>Infrastructural Gating (Turnstile)</h4>
+          <p>A blanket device ban (turnstile) blocks AI bypass but also cuts down accessibility bridges. Jordan and Maya are gated by system policies, not cognitive limits.</p>
+        </div>
+      </div>
+      
+      <div class="thesis" id="thesisStatement"></div>
+      <p class="disclaimer">*Note: All scores, stats, and achievements are illustrative models of the pedagogical friction framework, not validated learning assessment instruments.</p>
+      
+      <p style="margin-top:20px;">
+        <button class="btn" id="replayBtn">Redesign the Trail &rarr;</button>
+        <a class="home" href="https://minerclass.github.io/games-hub/">&larr; Back to the Games Hub</a>
+      </p>
+    </div>
+  </section>
+
+</div>
+<script src="game.js"></script>
+</body>
+</html>

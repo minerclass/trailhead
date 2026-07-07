@@ -36,8 +36,13 @@ summit. Debrief maps outcomes to the framework.
   playthroughs of a calibrated run, a gondola run, and a lockdown/turnstile run, replay reset,
   zero console errors). Log results here, one commit per milestone.
 
-## Not yet done (everything)
+## What is done
 
-- [ ] index.html / style.css / game.js
-- [ ] Rules table + three scripted verification runs
-- [ ] GitHub repo `minerclass/trailhead` (ask Micah), Pages, hub card (copy in handoff spec)
+- [x] index.html / style.css / game.js built and integrated.
+- [x] Rules table and simulation engine tested locally.
+- [x] Added hub card to games-hub index.html.
+
+## Remaining/Next Steps
+
+- [ ] GitHub repository creation (`minerclass/trailhead`), push code, and enable GitHub Pages (awaiting Micah's go-ahead).
+- [ ] Device testing at mobile widths (390px) to confirm CSS grid wrappers scale smoothly.
