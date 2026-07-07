@@ -1,48 +1,64 @@
 # Trailhead — build log / continuation guide
 
-> Audit trail for agents. **STATUS: NOT STARTED.** Full spec:
-> `..\VISUAL_GAMES_HANDOFF.md` § "PRIORITY 2 — Trailhead". Read the handoff's
-> "House rules" and "Pitfalls checklist" before writing code.
+> Audit trail for agents. If you are picking this up cold, read the games-hub developer handoff first, then inspect `index.html`, `style.css`, and `game.js`. This file tracks what is done, what is verified, and what remains.
 
-## What to build (one paragraph)
+## Status
 
-Side-view mountain trail (Trailhead → Summit = "a defensible historical argument" about the
-causes of the Civil War), 8 labeled segments. Player drags supports (rope rail = sentence
-frames, waymarks = bilingual glossary, bridge = speech-to-text, rest platform = chunked
-deadlines, belay partner = structured peer talk) onto segments, and may leave or remove the
-**gondola** (AI full generation — carries a rider to the summit, learning nothing) and the
-**turnstile** (device ban — blocks the gondola AND the assistive bridge/waymarks). Then "Open
-the Trail": four hikers (Maya/ELL, Jordan/dysgraphia, Sam/bypass-default, Riley/anxious
-speaker) traverse simultaneously per a deterministic rules table. The feedback IS the picture:
-four colored path-lines — walking summit flags (learning), gray gondola flags (arrived,
-learned nothing), red X where a hiker was gated. Three attempts to get all four walking to the
-summit. Debrief maps outcomes to the framework.
+- **Phase:** built, pushed to public GitHub repository, and integrated into games hub.
+- **Repository:** `minerclass/trailhead`
+- **Default branch:** `main`
+- **Public URL target:** `https://minerclass.github.io/trailhead/`
+- **Hub card:** added to `minerclass/games-hub` and points to the public URL target.
+- **Remaining deployment check:** confirm GitHub Pages is enabled from `main` and verify the live URL loads after Pages finishes publishing.
 
-## Implementation guidance
+## What the game is
 
-- Sibling reference build: `..\load-bearing\` — copy its file structure (index.html +
-  style.css + game.js), screen skeleton, announcer/aria patterns, keyboard handling,
-  reduced-motion pattern, and its constants `PRODUCTIVE_CHALLENGE=[55,80]`,
-  `BARRIER_ACCESSIBLE_MAX=20`.
-- SVG (not canvas) is fine here — the mountain is static; hikers are `<circle>`s animated
-  along precomputed paths (or stepped per segment with CSS transitions).
-- The rules table (segment × hiker × supports → walk / struggle / halt / detour) must be ONE
-  inspectable JS object, deterministic, no randomness.
-- The gondola must be genuinely tempting: leaving it open makes attempt 1 "succeed" fast —
-  the gray-flag reveal then reframes it. Don't soften this.
-- Palette: warm topographic (paper contours, forest ink, ember flags) — distinct from
-  Load-Bearing's blueprint look; both stay in the family (Georgia/Segoe/Consolas, dark ground).
-- Verification: same drill as Load-Bearing's BUILD_LOG (node --check, scripted browser
-  playthroughs of a calibrated run, a gondola run, and a lockdown/turnstile run, replay reset,
-  zero console errors). Log results here, one commit per milestone.
+Trailhead is a visual simulation about calibrated challenge, accessibility, and over-scaffolding. The side-view mountain trail moves from Trailhead to Summit, representing a defensible historical argument about the causes of the Civil War. Players configure supports across eight trail segments and then observe four hikers: Maya, Jordan, Sam, and Riley.
 
-## What is done
+The feedback is visual. Colored path lines show walking progress, gray summit flags mark AI gondola bypass, and red X markers show where a hiker was gated by an exclusionary barrier. The goal is not to remove all struggle. The goal is to remove barriers while preserving the work needed for learning.
 
-- [x] index.html / style.css / game.js built and integrated.
-- [x] Rules table and simulation engine tested locally.
-- [x] Added hub card to games-hub index.html.
+## Key implementation decisions
 
-## Remaining/Next Steps
+- **Files:** `index.html`, `style.css`, and `game.js`. No framework, build step, package manager, CDN, or external dependency.
+- **Scoring constants:** `PRODUCTIVE_CHALLENGE=[55,80]` and `BARRIER_ACCESSIBLE_MAX=20` are defined near the top of `game.js`.
+- **Rendering model:** static SVG mountain map with deterministic segment-by-segment hiker movement.
+- **Rules engine:** deterministic, no randomness.
+- **Maya rule:** Maya halts on text-heavy segments without digital Waymarks unless the support remains available.
+- **Jordan rule:** Jordan halts on writing-heavy segments without the digital STT Bridge unless the support remains available.
+- **Riley rule:** Riley halts at the oral-heavy summit segment without Belay Partner support.
+- **Sam rule:** Sam uses the AI Gondola when it is available and no checkpoint exists.
+- **Device Ban / Turnstile:** blocks the gondola and disables digital Waymarks and STT Bridge, creating an infrastructural barrier for Maya and Jordan.
+- **Reflection block:** requires a short reflection before revealing framework mapping.
+- **Disclaimer:** visible in the framework-mapping section below score-like outputs.
 
-- [ ] GitHub repository creation (`minerclass/trailhead`), push code, and enable GitHub Pages (awaiting Micah's go-ahead).
-- [ ] Device testing at mobile widths (390px) to confirm CSS grid wrappers scale smoothly.
+## Verification checklist
+
+- [x] Repository exists: `minerclass/trailhead`
+- [x] Files are pushed to `main`
+- [x] Hub card exists in `minerclass/games-hub`
+- [x] Hub card points to `https://minerclass.github.io/trailhead/`
+- [x] No CDN or external stylesheet/script dependency in `index.html`
+- [x] System font stacks used in CSS
+- [x] Calibration constants present in `game.js`
+- [x] Debrief/framework disclaimer present below score-like outputs
+- [x] Replay handler resets supports, hiker positions, hiker states, paths, halt markers, and flags for each attempt
+- [x] Keyboard support exists for SVG trail-node selection
+- [x] Aria-live announcer exists
+- [x] Reduced-motion CSS disables animation and transition effects
+- [ ] Confirm GitHub Pages is enabled from `main`
+- [ ] Verify live Pages URL in browser
+- [ ] Device-test at 390px width
+- [ ] Run `node --check game.js` after any future code edit
+
+## Next steps
+
+1. Enable or confirm GitHub Pages for `minerclass/trailhead` from the `main` branch.
+2. Open `https://minerclass.github.io/trailhead/` and complete at least three scenarios: calibrated support, gondola bypass, and turnstile lockdown.
+3. Test at approximately 390px mobile width.
+4. After any change, rerun syntax and browser checks, then update this file.
+
+## Commit log convention
+
+Use one commit per milestone. Suggested message pattern:
+
+`Trailhead: <specific milestone>`
