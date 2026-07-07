@@ -51,7 +51,9 @@ The feedback is visual. Colored path lines show walking progress, gray summit fl
       Success permanently 0/4. Also excluded gray-flag (gondola) arrivals from the Summit
       Success count to match the game's own thesis. Fix verified against live state: 86%
       challenge, real summit counting. `node --check` passes.
-- [ ] Device-test at 390px width
+- [x] Device-test at 390px width (2026-07-07, emulated viewport): zero horizontal overflow
+      on title, play, run, and debrief screens; SVG scales to 361px; all controls fit;
+      full run + debrief verified at mobile width (86% challenge renders correctly)
 - [x] FOLLOW-UP RESOLVED (2026-07-07): the divergent halt counts were caused by the
       continue button staying visible from the previous run, allowing the debrief to open
       mid-simulation and compute metrics from partial state. Fixes shipped: (1) continueBtn
