@@ -51,6 +51,16 @@ kbd { font-family:var(--mono); font-size:.78em; border:1px solid var(--line); bo
 .btn { display:inline-flex; align-items:center; gap:10px; padding:13px 26px; border:1px solid var(--ember); border-radius:999px; background:var(--ember); color:#fff; font-weight:750; cursor:pointer; transition:transform .15s ease, background-color .15s ease; }
 .btn:hover { transform:translateY(-2px); background-color:#923122; }
 .btn:disabled { opacity:.5; cursor:default; transform:none; }
+.btn.ghost { background:transparent; color:var(--forest); border-color:var(--line); }
+.btn.ghost:hover { border-color:var(--ember); color:var(--ember); background:transparent; }
+.forecast { display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin:14px 0 16px; padding:14px 16px; border:1px dashed var(--moss); border-radius:12px; background:rgba(73,109,89,.06); }
+.forecast-label { font-size:.92rem; color:var(--forest); }
+.forecast-label em { color:var(--ember); font-style:italic; }
+.forecast-btns { display:flex; gap:8px; margin-left:auto; flex-wrap:wrap; }
+.forecast-btns .btn { padding:9px 16px; }
+.forecast-result { font-family:var(--mono); font-size:.84rem; margin:12px 0 0; color:var(--moss); font-weight:700; }
+.forecast-result.miss { color:var(--gold); }
+@media (max-width:680px) { .forecast-btns { margin-left:0; } }
 
 .credit { color:var(--forest-dim); font-size:.8rem; margin-top:22px; border-top:1px solid var(--line); padding-top:16px; }
 .credit a { color:var(--ember); text-decoration:none; font-weight:600; }

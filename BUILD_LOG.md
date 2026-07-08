@@ -69,6 +69,17 @@ The feedback is visual. Colored path lines show walking progress, gray summit fl
       errors.
 - [ ] Run `node --check game.js` after any future code edit (and bump the `?v=` query)
 
+## 2026-07-07 engagement upgrade: forecast beat
+
+Before the trail opens, the player must forecast how many of the four hikers will summit
+on foot (0–4 buttons; simulation will not start without a forecast). The debrief scores the
+forecast against the actual count with directional coaching (over-forecast → "a barrier or
+the gondola gated someone you counted on"; under-forecast → "check which support did the
+quiet work"). Rationale: prediction-before-observation is generation-before-solution from
+the framework, and it converts passive watching into a tested design judgment. Verified in
+browser: simulation blocked until forecast, hit and miss paths both render, zero console
+errors. Script bumped to `game.js?v=4`.
+
 ## Next steps
 
 1. Enable or confirm GitHub Pages for `minerclass/trailhead` from the `main` branch.

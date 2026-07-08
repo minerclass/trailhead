@@ -164,6 +164,17 @@
       <span id="runStatus">Hikers are climbing...</span>
     </div>
 
+    <div class="forecast" id="forecastRow" role="group" aria-label="Forecast how many hikers summit on foot">
+      <span class="forecast-label">Before the trail opens &mdash; how many of the four will summit <em>on foot</em>?</span>
+      <div class="forecast-btns">
+        <button class="btn ghost" data-forecast="0">0</button>
+        <button class="btn ghost" data-forecast="1">1</button>
+        <button class="btn ghost" data-forecast="2">2</button>
+        <button class="btn ghost" data-forecast="3">3</button>
+        <button class="btn ghost" data-forecast="4">4</button>
+      </div>
+    </div>
+
     <div class="mountain-panel anim-view">
       <div class="svg-container">
         <!-- Re-rendered clone of mountain SVG for run animation -->
@@ -199,6 +210,7 @@
           <div class="stat"><span class="lbl">Productive Challenge</span><span class="val" id="statChallenge">0%</span></div>
           <div class="stat"><span class="lbl">Exclusionary Barriers</span><span class="val" id="statBarrier">0%</span></div>
         </div>
+        <p class="forecast-result" id="forecastResult"></p>
 
         <div class="crossings-box">
           <h3>Individual Hiker Outcomes</h3>
@@ -243,6 +255,6 @@
   </section>
 
 </div>
-<script src="game.js?v=3"></script>
+<script src="game.js?v=4"></script>
 </body>
 </html>

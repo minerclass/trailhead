@@ -121,6 +121,16 @@ function init() {
   // Run attempt button
   $("runBtn").addEventListener("click", runAttempt);
 
+  // Forecast buttons (0–4 summit-on-foot prediction opens the trail)
+  document.querySelectorAll("[data-forecast]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      S.forecast = parseInt(btn.dataset.forecast, 10);
+      $("forecastRow").style.display = "none";
+      announce("Forecast recorded: " + S.forecast + " on foot. The trail is open.");
+      startSimulation();
+    });
+  });
+
   // Continue to debrief button
   $("continueBtn").addEventListener("click", showDebrief);
 
@@ -164,6 +174,7 @@ function resetAttemptState() {
   S.hikerPaths = { ell: [], dys: [], rly: [], sam: [] };
   S.hikerHaltSeg = { ell: null, dys: null, rly: null, sam: null };
   S.hikerSummitFlag = { ell: null, dys: null, rly: null, sam: null };
+  S.forecast = null;
 }
 
 /* ---------- rendering functions ---------- */
@@ -343,9 +354,19 @@ function runAttempt() {
   renderHikerDots();
   renderHikerStatuses();
 
+  // Forecast beat: the player commits a prediction before the trail opens.
+  // Generation-before-observation — the design judgment gets tested, not just watched.
+  S.forecast = null;
+  $("runStatus").textContent = "Make your forecast to open the trail.";
+  $("forecastRow").style.display = "flex";
+}
+
+function startSimulation() {
+  $("runStatus").textContent = "Hikers are climbing...";
+
   // Begin simulation clock
   let step = 0;
-  
+
   // Sam rule: Gondola active, no turnstile lockdown, and NO checkpoint anywhere on the trail
   const hasCheckpoint = Object.values(S.supports).includes("checkpoint");
   const samGondola = S.gondola && !S.turnstile && !hasCheckpoint;
@@ -655,6 +676,21 @@ function showDebrief() {
   $("statSummit").textContent = totalSuccessfulSummits + " / 4";
   $("statChallenge").textContent = avgChallenge + "%";
   $("statBarrier").textContent = barrierLevel + "%";
+
+  // Score the pre-run forecast against what actually happened
+  const fr = $("forecastResult");
+  if (S.forecast !== null && S.forecast !== undefined) {
+    const hit = S.forecast === totalSuccessfulSummits;
+    fr.className = "forecast-result" + (hit ? "" : " miss");
+    fr.textContent = hit
+      ? "FORECAST: called it — " + totalSuccessfulSummits + " on foot. Your read of the trail matched the trail."
+      : "FORECAST: you predicted " + S.forecast + "; " + totalSuccessfulSummits + " summited on foot. " +
+        (totalSuccessfulSummits < S.forecast
+          ? "A barrier — or the gondola — gated someone you counted on. Find where in the path traces."
+          : "The trail carried more hikers than you gave it credit for. Check which support did the quiet work.");
+  } else {
+    fr.textContent = "";
+  }
 
   // Build detail outcomes list
   const list = $("crossingsList");
