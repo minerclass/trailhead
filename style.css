@@ -1,9 +1,16 @@
 /* TRAILHEAD — warm topographic-map aesthetic
    paper ground, forest ink, moss boundaries, gold/ember accents */
 :root {
-  --paper:#f7f2e8; --paper-dark:#ede6d9; --forest:#142d22; --forest-dim:#354a3f;
+  /* Surface and rules come from the shared tokens with pre-adoption fallbacks.
+     The trail palette (forest, moss, gold, ember, slate) stays local. */
+  --paper:var(--mjm-surface,#f7f2e8); --paper-dark:#ede6d9; --forest:#142d22; --forest-dim:#354a3f;
   --moss:#496d59; --gold:#c6922c; --ember:#b03e2c; --slate:#2f5366;
-  --line:rgba(20,45,34,.12);
+  /* Text-safe gold. --gold above measures 2.49 on paper and is a real barrier as
+     text; it stays correct as a border, fill, and stroke. Text uses the shared
+     paper-ground gold ink instead. */
+  --gold-text:var(--mjm-gold-ink,#8a6412);
+  --line:var(--mjm-line,rgba(20,45,34,.12));
+  --mjm-accent:var(--mjm-rust,#b03e2c);
   --serif:Georgia,"Times New Roman",serif;
   --sans:"Segoe UI",system-ui,-apple-system,sans-serif;
   --mono:Consolas,"Courier New",monospace;
@@ -59,7 +66,7 @@ kbd { font-family:var(--mono); font-size:.78em; border:1px solid var(--line); bo
 .forecast-btns { display:flex; gap:8px; margin-left:auto; flex-wrap:wrap; }
 .forecast-btns .btn { padding:9px 16px; }
 .forecast-result { font-family:var(--mono); font-size:.84rem; margin:12px 0 0; color:var(--moss); font-weight:700; }
-.forecast-result.miss { color:var(--gold); }
+.forecast-result.miss { color:var(--gold-text); }
 @media (max-width:680px) { .forecast-btns { margin-left:0; } }
 
 .credit { color:var(--forest-dim); font-size:.8rem; margin-top:22px; border-top:1px solid var(--line); padding-top:16px; }
@@ -73,7 +80,9 @@ kbd { font-family:var(--mono); font-size:.78em; border:1px solid var(--line); bo
 .hiker-card strong { font-size:.95rem; color:var(--forest); }
 .hiker-card p { margin:0; font-size:.85rem; line-height:1.45; color:var(--forest-dim); }
 .h-dot { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:5px; font-family:var(--mono); font-size:.75rem; font-weight:700; color:#fff; }
-.dot-ell { background:var(--gold); }
+/* .h-dot sets white text, which works on the dark badges but measured 2.78 on
+   this light gold one. Dark forest text on gold gives 5.29. */
+.dot-ell { background:var(--gold); color:var(--forest); }
 .dot-dys { background:var(--slate); }
 .dot-sam { background:var(--forest-dim); }
 .dot-rly { background:var(--ember); }
@@ -152,7 +161,7 @@ kbd { font-family:var(--mono); font-size:.78em; border:1px solid var(--line); bo
 .status-card .s-seg { font-family:var(--mono); font-size:.72rem; color:var(--forest-dim); }
 .status-card .s-action { font-family:var(--mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; margin-top:4px; }
 .status-card.active-walk .s-action { color:var(--moss); }
-.status-card.active-struggle .s-action { color:var(--gold); animation:wiggle .25s ease infinite alternate; }
+.status-card.active-struggle .s-action { color:var(--gold-text); animation:wiggle .25s ease infinite alternate; }
 .status-card.active-halt .s-action { color:var(--ember); font-weight:800; }
 .status-card.active-zip .s-action { color:var(--slate); }
 
