@@ -100,7 +100,10 @@ kbd { font-family:var(--mono); font-size:.78em; border:1px solid var(--line); bo
   background-size:24px 24px, 24px 24px, auto; overflow:hidden; position:relative; }
 .panel-header { font-family:var(--mono); font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; padding:10px 14px; background:rgba(20,45,34,.05); border-bottom:1px solid var(--line); color:var(--forest-dim); display:flex; justify-content:space-between; }
 .svg-container { position:relative; display:block; width:100%; }
-.svg-container svg { display:block; }
+/* height is set here rather than as an attribute: `height="auto"` is not a valid
+   SVG attribute length and threw a console error on every load. With a viewBox
+   and width:100%, auto height scales by the intrinsic aspect ratio. */
+.svg-container svg { display:block; height:auto; }
 
 /* SVG styles */
 .mountain-bg { fill:rgba(73,109,89,.14); stroke:var(--moss); stroke-width:1.5; }

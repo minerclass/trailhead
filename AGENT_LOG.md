@@ -6,6 +6,31 @@ or tokens.
 
 ---
 
+## 2026-09-01 - Remove invalid SVG height attributes
+
+Noticed while verifying the token adoption on the live page: three console errors on every
+load, `<svg> attribute height: Expected length, "auto"`.
+
+**Pre-existing, not from the token work.** The three mountain SVGs (lines 72, 182, 203)
+carried `height="auto"`. `auto` is a valid CSS keyword but not a valid SVG *attribute*
+length, so the browser rejected it and logged an error each time. Confirmed unrelated: the
+token commit's diff touched zero SVG lines.
+
+**Fix.** Removed the attribute from all three and set `height:auto` in CSS instead, on
+`.svg-container svg`, where the keyword is legal. With a `viewBox` and `width:100%` the
+intrinsic aspect ratio drives the height.
+
+**Verified.** Zero console errors on a fresh page load. The SVGs sit on hidden `.screen`
+elements so they measure 0x0 at rest; forced visible, one measures 428x254, an aspect of
+**1.682**, exactly matching the 740/440 viewBox. Sizing is unchanged.
+
+**Worth knowing when checking consoles here.** The browser console accumulates across
+navigations, so a stale error from a previous load can look like a live one. Confirm in a
+fresh tab before concluding a fix did not work.
+
+
+---
+
 ## 2026-09-01 - Adopt the paper ground, and fix a pre-existing badge contrast failure
 
 **Token adoption.** Paper surface and rules now come from the shared tokens with
